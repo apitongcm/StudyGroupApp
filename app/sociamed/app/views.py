@@ -94,10 +94,19 @@ def home(request):
         ]
 
         if file:
+
+            file.seek(0, os.SEEK_END)  
+            size = file.tell()         
+            file.seek(0)
+
             ext = os.path.splitext(file.name)[1].lower()
             if ext not in allowed_extensions:
                 messages.error(request, 'Unsupported file type')
                 return redirect('home')
+            
+        if not content and (not file or file.size == 0):
+            messages.error(request, 'You must provide either text content or a file.')
+            return redirect('home')
 
         Tweet.objects.create(
             user=request.user,

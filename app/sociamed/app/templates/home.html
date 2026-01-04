@@ -133,20 +133,26 @@
     <div class="container">
         <nav>
             <span style="font-weight: 800; letter-spacing: -1px;">STUDY GROUP</span>
-            <a href="/logout/">Logout</a>
+            <a data-testid="tc-home-001" href="/logout/">Logout</a>
         </nav>
 
         <section class="composer">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <textarea name="content" placeholder="What's happening?"></textarea>
-                 <input type="file" name="attachment"
+                <textarea data-testid="tc-home-002" name="content" placeholder="What's happening?"></textarea>
+                 <input data-testid="tc-home-003" type="file" name="attachment"
                     accept=".jpg,.jpeg,.png,.gif,.mp4,.mp3,.pdf,.docx,.xlsx">
-                <button type="submit">Tweet</button>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <p style="color:red;">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+                <button data-testid="tc-home-004"type="submit">Tweet</button>
             </form>
         </section>
 
-        <main class="feed">
+        <main data-testid="tc-home-005" class="feed">
             {% for tweet in tweets %}
             <article class="tweet">
                 <div class="tweet-header">
@@ -169,6 +175,9 @@
                 <div class="actions">
                     <a href="/like/{{ tweet.id }}/">
                         <span>♥</span> Like
+                    </a>
+                    <a href="/like/{{ tweet.id }}/">
+                        Delete
                     </a>
                 </div>
             </article>
