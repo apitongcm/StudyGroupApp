@@ -6,7 +6,7 @@ from django.contrib import messages
 from .models import Tweet, Follow, Like
 from django.core.cache import cache
 import os
-from .urls import *
+from .models import *
 
 MAX_ATTEMPTS = 5
 BLOCK_TIME = 15 * 60
@@ -82,7 +82,7 @@ def logout_view(request):
 def home(request):
     if request.method == 'POST':
         content = request.POST.get('content', '')
-        file = request.FILES.get('attachment')
+        files = request.FILES.getlist('attachment')
 
 
         allowed_extensions = [
@@ -92,26 +92,36 @@ def home(request):
             '.pdf', '.docx', '.xlsx'
         ]
 
-        if file:
+        MAX_FILE_SIZE = 10 * 1024 * 1024  #10MB limit
 
-            file.seek(0, os.SEEK_END)  
-            size = file.tell()         
-            file.seek(0)
 
+        for file in files:
             ext = os.path.splitext(file.name)[1].lower()
             if ext not in allowed_extensions:
                 messages.error(request, 'Unsupported file type')
                 return redirect('home')
             
-        if not content and (not file or file.size == 0):
+            if file.size > MAX_FILE_SIZE:
+                messages.error(
+                request,
+                f'File too large (max 10MB): {file.name}'
+            )
+            
+        if not content and (not files or files.size ==0):
             messages.error(request, 'You must provide either text content or a file.')
             return redirect('home')
 
-        Tweet.objects.create(
+        post = Tweet.objects.create(
             user=request.user,
-            content=content,
-            attachment=file
+            content=content
         )
+
+        for file in files:
+            Attachment.objects.create(
+            post=post,
+            file=file
+        )
+
 
         return redirect('home')
         

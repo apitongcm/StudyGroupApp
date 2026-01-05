@@ -140,7 +140,7 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <textarea data-testid="tc-home-002" name="content" placeholder="What's happening?"></textarea>
-                 <input data-testid="tc-home-003" type="file" name="attachment"
+                 <input data-testid="tc-home-003" type="file" name="attachment" id="fileInput" multiple
                     accept=".jpg,.jpeg,.png,.gif,.mp4,.mp3,.pdf,.docx,.xlsx">
 
                 {% if messages %}
@@ -161,16 +161,17 @@
                     </a>
                 </div>
                 <div class="content">
+                    {% load file_extras %}
                      {{ tweet.content }}
-                     {% if tweet.attachment %}
-                         {% with tweet.attachment.url as url %}
-                             {% if url|slice:"-4:"|lower == ".jpg" or url|slice:"-4:"|lower == ".png" %}
-                                <img src="{{ url }}" width="500">
+                     {% for attachment in tweet.attachments.all %}
+                             {% if attachment.file.name|is_image %}
+                                    <img src="{{ attachment.file.url }}" width="500">
                              {% else %}
-                                <a href="{{ url }}" target="_blank">View attachment</a>
+                                    <a href="{{ attachment.file.url }}" target="_blank">
+                                            {{ attachment.file|filename }}
+                                    </a>
                              {% endif %}
-                         {% endwith %}
-                     {% endif %}
+                     {% endfor %}
                      {% if tweet.user == request.user %}
                       <form action="{% url 'delete_tweet' tweet.id %}" method="POST">
                             {% csrf_token %}

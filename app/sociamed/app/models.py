@@ -25,3 +25,7 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ('user', 'tweet')
+
+class Attachment(models.Model):
+    post = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name='attachments')
+    file = models.FileField(upload_to='attachments/')
