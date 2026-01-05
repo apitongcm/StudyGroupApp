@@ -144,12 +144,23 @@ def delete_tweet(request,tweet_id):
 @login_required
 def profile(request, username):
     user = get_object_or_404(User, username=username)
+
+    followers_count = Follow.objects.filter(
+        following=user
+    ).count()
+
+    following_count = Follow.objects.filter(
+        follower=user
+    ).count()
+
     tweets = Tweet.objects.filter(user=user)
     is_following = Follow.objects.filter(follower=request.user, following=user).exists()
     return render(request, 'profile.html', {
         'profile_user': user,
         'tweets': tweets,
-        'is_following': is_following
+        'is_following': is_following,
+        'followers_count': followers_count,
+        'following_count': following_count,
     })
 
 @login_required

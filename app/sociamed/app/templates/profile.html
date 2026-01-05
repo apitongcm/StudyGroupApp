@@ -132,6 +132,17 @@
             </div>
             <h2>{{ profile_user.username }}</h2>
             <span class="handle">@{{ profile_user.username }}</span>
+            <div class="profile-stats">
+                <span>
+                    <strong>{{ followers_count }}</strong> Followers
+                </span>
+    
+                <span>
+                    <strong>{{ following_count }}</strong> Following
+                </span>
+            </div>
+
+
 
             {% if request.user != profile_user %}
                 {% if is_following %}

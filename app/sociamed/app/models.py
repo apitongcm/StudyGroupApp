@@ -15,6 +15,10 @@ class Follow(models.Model):
     follower = models.ForeignKey(User, related_name='follower', on_delete=models.CASCADE)
     following = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('follower', 'following')
+
+
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
