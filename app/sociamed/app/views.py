@@ -6,6 +6,7 @@ from django.contrib import messages
 from .models import Tweet, Follow, Like
 from django.core.cache import cache
 import os
+from .urls import *
 
 MAX_ATTEMPTS = 5
 BLOCK_TIME = 15 * 60
@@ -137,6 +138,7 @@ def delete_tweet(request,tweet_id):
         messages.success(request, 'Tweet deleted successfully')
     else:
         messages.error(request, 'You do not have permission to delete this.')
+
     return redirect('home')
 
 @login_required

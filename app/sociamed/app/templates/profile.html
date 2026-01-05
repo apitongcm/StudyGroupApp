@@ -87,6 +87,7 @@
             font-size: 0.9rem;
         }
 
+
         /* TWEET FEED */
         .feed-title {
             font-size: 0.8rem;
@@ -99,13 +100,14 @@
         }
 
         .tweet {
-            padding: 20px 0;
+            padding: 20px 0px;
             border-bottom: 1px solid var(--border);
         }
 
         .tweet-content {
             font-size: 1.1rem;
             color: var(--text-main);
+            padding: 0px 100px;
             word-wrap: break-word;
         }
 
@@ -142,7 +144,24 @@
             <h3 class="feed-title">Posts</h3>
             {% for tweet in tweets %}
             <article class="tweet">
-                <p class="tweet-content">{{ tweet.content }}</p>
+                <div class="tweet-content">{{ tweet.content }}
+                      {% if tweet.attachment %}
+                         {% with tweet.attachment.url as url %}
+                             {% if url|slice:"-4:"|lower == ".jpg" or url|slice:"-4:"|lower == ".png" %}
+                                <img src="{{ url }}" width="500">
+                             {% else %}
+                                <a href="{{ url }}" target="_blank">View attachment</a>
+                             {% endif %}
+                         {% endwith %}
+                      {% endif %}
+                      {% if tweet.user == request.user %}
+                      <form action="{% url 'delete_tweet' tweet.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                      </form>
+                     {% endif %}
+                </div>
+                
             </article>
             {% empty %}
                 <p style="text-align: center; color: var(--text-muted); margin-top: 2rem;">No posts yet.</p>
