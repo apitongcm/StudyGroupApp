@@ -9,4 +9,5 @@ urlpatterns = [
     path('profile/<str:username>/', profile, name='profile'),
     path('follow/<str:username>/', follow_user, name='follow'),
     path('like/<int:tweet_id>/', like_tweet, name='like'),
+    path('delete/<int:tweet_id>/', delete_tweet, name='delete_tweet'),
 ]

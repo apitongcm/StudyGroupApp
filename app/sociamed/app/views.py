@@ -19,8 +19,6 @@ def register_view(request):
             messages.error(request, 'Username already exists. Please choose another.')
             return redirect('register')
 
-
-
          User.objects.create_user(
             username=username,
             password=password
@@ -125,6 +123,21 @@ def home(request):
     ).order_by('-created_at')
 
     return render(request, 'home.html', {'tweets': tweets})
+
+@login_required
+def delete_tweet(request,tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+
+    if tweet.user ==request.user:
+
+        if tweet.attachment:
+            tweet.attachment.delete(save=False)
+
+        tweet.delete()
+        messages.success(request, 'Tweet deleted successfully')
+    else:
+        messages.error(request, 'You do not have permission to delete this.')
+    return redirect('home')
 
 @login_required
 def profile(request, username):
