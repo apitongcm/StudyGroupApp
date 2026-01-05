@@ -62,7 +62,7 @@
         }
 
         /* FOLLOW BUTTON */
-        .btn-follow {
+        .btn-follow, .btn-unfollow {
             display: inline-block;
             background: var(--accent);
             color: #fff;
@@ -133,10 +133,16 @@
             <h2>{{ profile_user.username }}</h2>
             <span class="handle">@{{ profile_user.username }}</span>
 
-            {% if not is_following %}
-                <a href="/follow/{{ profile_user.username }}/" class="btn-follow">Follow</a>
-            {% else %}
-                <span class="following-tag">Following</span>
+            {% if request.user != profile_user %}
+                {% if is_following %}
+                    <a href="{% url 'unfollow' profile_user.username %}" class="btn-unfollow">
+                        Unfollow
+                    </a>
+                {% else %}
+                    <a href="{% url 'follow' profile_user.username %}" class="btn-follow">
+                        Follow
+                    </a>
+                {% endif %}
             {% endif %}
         </header>
 

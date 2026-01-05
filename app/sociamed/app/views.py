@@ -158,6 +158,14 @@ def follow_user(request, username):
     Follow.objects.get_or_create(follower=request.user, following=user)
     return redirect('profile', username=username)
 
+def unfollow_user(request, username):
+    user = get_object_or_404(User, username=username)
+    Follow.objects.filter(
+        follower=request.user,
+        following=user
+    ).delete()
+    return redirect('profile', username=username)
+
 @login_required
 def like_tweet(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id)
