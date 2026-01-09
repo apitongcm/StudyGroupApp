@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { WEBSITEURL,DUMMY_USER, UNREGISTERED_DUMMY, PASSWORDS} from './auth/constant';
+import { WEBSITEURL,DUMMY_USER, PASSWORDS} from './auth/constant';
 
 test('Dictionary Attack', async ({ page }) => {
-
+     //Case - Using the list of Passwords, confirm that rate limiting of request is working.
+     //Judgement Criteria - confirm that login request will be disabled after 5 unsuccessful request.
     await page.goto(WEBSITEURL+'/login/');
     await expect(page).toHaveTitle('Login');
 
