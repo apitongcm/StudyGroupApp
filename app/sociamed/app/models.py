@@ -29,3 +29,19 @@ class Like(models.Model):
 class Attachment(models.Model):
     post = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name='attachments')
     file = models.FileField(upload_to='attachments/')
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = (
+        ('follow', 'New Follower'),
+        ('new_tweet', 'New Tweet'),
+    )
+
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    actor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    tweet = models.ForeignKey('Tweet', on_delete=models.CASCADE, null=True, blank=True) # Optional link to a tweet
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_at']

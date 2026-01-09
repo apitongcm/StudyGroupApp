@@ -137,7 +137,7 @@
         </nav>
 
         <section class="composer">
-            <form method="post" enctype="multipart/form-data">
+            <form data-testid="tc-register-001" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <textarea data-testid="tc-home-002" name="content" placeholder="What's happening?"></textarea>
                  <input data-testid="tc-home-003" type="file" name="attachment" id="fileInput" multiple

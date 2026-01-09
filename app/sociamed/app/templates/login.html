@@ -108,18 +108,18 @@
 
         <form method="post">
             {% csrf_token %}
-            <input name="username" placeholder="Username" aria-label="Username" required>
-            <input name="password" type="password" placeholder="Password" aria-label="Password" required>
+            <input data-testid="tc-login-001" name="username" placeholder="Username" aria-label="Username" required>
+            <input data-testid="tc-login-002"name="password" type="password" placeholder="Password" aria-label="Password" required>
             
             
             {% if messages %}
                 {% for message in messages %}
-                    <p style="color:red;">{{ message }}</p>
+                    <p data-testid="tc-login-004" style="color:red;">{{ message }}</p>
                 {% endfor %}
             {% endif %}
 
 
-            <button type="submit">Login</button>
+            <button data-testid="tc-login-003" type="submit">Login</button>
         </form>
 
 
@@ -127,7 +127,7 @@
 
         <div class="footer-links">
             <span>Don't have an account?</span> 
-            <a href="/register/">Register</a>
+            <a data-testid="tc-login-005" href="/register/">Register</a>
         </div>
 
 

@@ -176,9 +176,12 @@ def profile(request, username):
 @login_required
 def follow_user(request, username):
     user = get_object_or_404(User, username=username)
+
     Follow.objects.get_or_create(follower=request.user, following=user)
+
     return redirect('profile', username=username)
 
+@login_required
 def unfollow_user(request, username):
     user = get_object_or_404(User, username=username)
     Follow.objects.filter(
