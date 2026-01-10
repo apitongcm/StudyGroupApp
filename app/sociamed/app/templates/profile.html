@@ -125,7 +125,6 @@
         <nav style="margin-bottom: 2rem;">
             <a href="/" style="text-decoration: none; color: var(--text-muted); font-size: 0.9rem;">← Back</a>
         </nav>
-
         <header class="profile-header">
             <div class="avatar-placeholder">
                 {{ profile_user.username|slice:":1"|upper }}
@@ -155,6 +154,24 @@
                     </a>
                 {% endif %}
             {% endif %}
+
+
+            {% if request.user == profile_user %}
+                <div style="margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px;">
+                    <h3 style="color: red;">Danger Zone</h3>
+                        <p>Once you delete your account, there is no going back. Please be certain.</p>
+        
+                  <form action="{% url 'delete_account' %}" method="POST" 
+                    onsubmit="return confirm('Are you absolutely sure? This cannot be undone.');">
+                    {% csrf_token %}
+                        <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                            Delete My Account
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+
+
         </header>
 
         <main>

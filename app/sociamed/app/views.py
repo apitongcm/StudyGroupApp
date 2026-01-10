@@ -209,3 +209,15 @@ def search_profiles(request):
      
      else:
         return render(request, 'search_results.html', {})
+     
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+
+        logout(request)
+        user.delete()
+        messages.success(request, "Your account has been successfully deleted.")
+
+        return redirect('login')
+    return redirect('profile', username=request.user.username)
