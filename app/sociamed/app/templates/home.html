@@ -133,6 +133,16 @@
     <div class="container">
         <nav>
             <span style="font-weight: 800; letter-spacing: -1px;">STUDY GROUP</span>
+
+            <form action="" method="POST" style="display: flex; gap: 10px;">
+            {% csrf_token %}
+            <input type="search" name="searched" placeholder="Search usernames..." required>
+            <button type="submit">Search</button>
+            </form>
+
+
+
+            <a data-testid="tc-home-006" href="/profile/{{ request.user.username }}/">My Profile</a>
             <a data-testid="tc-home-001" href="/logout/">Logout</a>
         </nav>
 
