@@ -134,7 +134,7 @@
         <nav>
             <span style="font-weight: 800; letter-spacing: -1px;">STUDY GROUP</span>
 
-            <form action="" method="POST" style="display: flex; gap: 10px;">
+            <form action="{% url 'search-profiles' %}" method="POST" style="display: flex; gap: 10px;">
             {% csrf_token %}
             <input type="search" name="searched" placeholder="Search usernames..." required>
             <button type="submit">Search</button>

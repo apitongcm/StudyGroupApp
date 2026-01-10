@@ -195,3 +195,17 @@ def like_tweet(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id)
     Like.objects.get_or_create(user=request.user, tweet=tweet)
     return redirect('home')
+
+@login_required
+def search_profiles(request):
+     if request.method == 'POST':
+         searched = request.POST.get('searched')
+         results = User.objects.filter(username__icontains=searched)
+
+         return render(request, 'search_results.html', {
+            'searched': searched,
+            'results': results
+        })
+     
+     else:
+        return render(request, 'search_results.html', {})
