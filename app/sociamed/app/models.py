@@ -30,6 +30,20 @@ class Attachment(models.Model):
     post = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name='attachments')
     file = models.FileField(upload_to='attachments/')
 
+class Comment(models.Model):
+    tweet = models.ForeignKey(
+        'Tweet',
+        related_name='comments',
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username}: {self.content[:30]}'
+
+
 class Notification(models.Model):
     NOTIFICATION_TYPES = (
         ('follow', 'New Follower'),

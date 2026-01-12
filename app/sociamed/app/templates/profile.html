@@ -176,17 +176,28 @@
 
         <main>
             <h3 class="feed-title">Posts</h3>
+            <div class="tweet-header">
+                    <a href="/profile/{{ tweet.user.username }}/" class="username">
+                        @{{ request.user.username }}
+                    </a>
+                    <span style="color: gray; font-size: 0.8em;">
+                    · {{ tweet.created_at|date:"M d, Y" }} at {{ tweet.created_at|date:"P" }}
+                    </span>
+                </div>
+            {% load file_extras %}
             {% for tweet in tweets %}
             <article class="tweet">
                 <div class="tweet-content">{{ tweet.content }}
-                      {% if tweet.attachment %}
-                         {% with tweet.attachment.url as url %}
-                             {% if url|slice:"-4:"|lower == ".jpg" or url|slice:"-4:"|lower == ".png" %}
-                                <img src="{{ url }}" width="500">
+                      {% if tweet.attachments %}
+                          {% for attachment in tweet.attachments.all %}
+                             {% if attachment.file.name|is_image %}
+                                    <img src="{{ attachment.file.url }}" width="500">
                              {% else %}
-                                <a href="{{ url }}" target="_blank">View attachment</a>
+                                    <a href="{{ attachment.file.url }}" target="_blank">
+                                            {{ attachment.file|filename }}
+                                    </a>
                              {% endif %}
-                         {% endwith %}
+                      {% endfor %}
                       {% endif %}
                       {% if tweet.user == request.user %}
                       <form action="{% url 'delete_tweet' tweet.id %}" method="POST">
@@ -195,6 +206,28 @@
                       </form>
                      {% endif %}
                 </div>
+                  <div class="comments">
+                        {% for comment in tweet.comments.all %}
+                        <div class="comment">
+                            <strong>@{{ comment.user.username }}</strong>
+                                    {{ comment.content }}
+                        </div>
+                        {% empty %}
+                        <p style="color:#999;">No comments yet</p>
+                        {% endfor %}
+                </div>
+
+                
+                <form action="{% url 'add_comment' tweet.id %}" method="post">
+                    {% csrf_token %}
+                    <input
+                    type="text"
+                    name="content"
+                    placeholder="Write a comment..."
+                    required
+                    >
+                    <button type="submit">Reply</button>
+                </form>
                 
             </article>
             {% empty %}

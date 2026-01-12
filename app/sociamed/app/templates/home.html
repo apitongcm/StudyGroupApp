@@ -169,6 +169,9 @@
                     <a href="/profile/{{ tweet.user.username }}/" class="username">
                         @{{ tweet.user.username }}
                     </a>
+                    <span style="color: gray; font-size: 0.8em;">
+                    · {{ tweet.created_at|date:"M d, Y" }} at {{ tweet.created_at|date:"P" }}
+                    </span>
                 </div>
                 <div class="content">
                     {% load file_extras %}
@@ -192,9 +195,35 @@
                 <div class="actions">
                     <a href="/like/{{ tweet.id }}/">
                         <span>♥</span> Like
+                        
                     </a>
-                   
+                    <span>{{ tweet.likes.count }} likes
+                    <span>{{ tweet.comments.count }} comments</span>
                 </div>
+                
+                <div class="comments">
+                        {% for comment in tweet.comments.all %}
+                        <div class="comment">
+                            <strong>@{{ comment.user.username }}</strong>
+                                    {{ comment.content }}
+                        </div>
+                        {% empty %}
+                        <p style="color:#999;">No comments yet</p>
+                        {% endfor %}
+                </div>
+
+                
+                <form action="{% url 'add_comment' tweet.id %}" method="post">
+                    {% csrf_token %}
+                    <input
+                    type="text"
+                    name="content"
+                    placeholder="Write a comment..."
+                    required
+                    >
+                    <button type="submit">Reply</button>
+                </form>
+
             </article>
             {% endfor %}
         </main>

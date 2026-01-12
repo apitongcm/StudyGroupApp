@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.urls import resolve
 from django.contrib import messages
-from .models import Tweet, Follow, Like
 from django.core.cache import cache
 import os
 from .models import *
@@ -221,3 +221,20 @@ def delete_account(request):
 
         return redirect('login')
     return redirect('profile', username=request.user.username)
+
+@login_required
+def add_comment(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+
+        if content:
+            Comment.objects.create(
+                tweet=tweet,
+                user=request.user,
+                content=content
+            )
+        if not resolve(request.path_info).url_name == 'home':
+            return redirect('profile', username=request.user.username)
+    return redirect('home')

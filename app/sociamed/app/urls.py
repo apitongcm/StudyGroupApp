@@ -13,4 +13,5 @@ urlpatterns = [
     path('delete/<int:tweet_id>/', delete_tweet, name='delete_tweet'),
     path('search/', search_profiles, name='search-profiles'),
     path('delete-account/', delete_account, name='delete_account'),
+    path('comment/<int:tweet_id>/', add_comment, name='add_comment'),
 ]
